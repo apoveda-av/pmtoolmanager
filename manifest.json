@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "Real Name Widget Extractor",
+  "version": "1.0",
+  "description": "Obtiene los nombres de los widgets de Avantio",
+  "icons": {
+    "48": "icons/avantio.png"
+  },
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
+  "action": {
+    "default_icon": "icons/avantio.png",
+    "default_title": "Real Name Widget Extractor"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}
