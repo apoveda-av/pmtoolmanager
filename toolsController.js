@@ -1,6 +1,7 @@
 // Lista de herramientas disponibles: nombre del archivo y etiqueta del botón
 const availableTools = {
     "getNamesWidget": "Nombres Widget",
+    "getInfoWeb": "Informacion Web",
     // Añade más herramientas aquí según las agregues a la carpeta tools/
 };
 
