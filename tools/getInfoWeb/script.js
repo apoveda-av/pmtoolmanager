@@ -1,6 +1,6 @@
 (function () {
     // marca global por pestaña
-    const FLAG = "__ptm_active";
+    const FLAG = "__ptm_infoweb_active";
     function addWidgets() {
         // ahora usamos Shadow DOM por widget para encapsular estilo y marcado
         const body = document.body;
