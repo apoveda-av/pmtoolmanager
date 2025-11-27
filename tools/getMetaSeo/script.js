@@ -1,8 +1,5 @@
 (function () {
-    // marca global por pestaña
-    const FLAG = "__ptm_metaseo_active";
     function addWidgets() {
-        // ahora usamos Shadow DOM por widget para encapsular estilo y marcado
         const body = document.body;
         const data = [];
         const seoTitleContent = document.querySelector('meta[property="og:title"]').content;
@@ -13,14 +10,12 @@
         const seoDescription = seoDescriptionContent || "No tiene meta descripción";
 
         data.push(titleDescription, seoDescription);
-        // // host para el shadow root
+        
         const host = document.createElement("div");
         host.className = "ptm-metaseo-host";
 
-        // attach shadow root (modo open para debug/inspección)
         const sr = host.attachShadow({ mode: "open" });
 
-        // estilo encapsulado dentro del shadow root
         const style = document.createElement("style");
         style.textContent = `
             .name {
@@ -69,29 +64,8 @@
     }
 
     function removeWidgets() {
-        // eliminar hosts con shadow
         document.querySelectorAll(".ptm-metaseo-host").forEach(el => el.remove());
     }
 
-    function toggleWidgets() {
-        if (window[FLAG]) {
-            removeWidgets();
-            window[FLAG] = false;
-            console.log("ptm: removed");
-        } else {
-            const names = addWidgets();
-            window[FLAG] = true;
-            console.log("ptm: injected", names);
-        }
-    }
-
-    function init() {
-        if (document.readyState === "loading") {
-            document.addEventListener("DOMContentLoaded", toggleWidgets, { once: true });
-        } else {
-            toggleWidgets();
-        }
-    }
-
-    init();
+    PTMWidgetManager.init("metaseo", addWidgets, removeWidgets);
 })();

@@ -1,22 +1,15 @@
 (function () {
-    // marca global por pestaña
-    const FLAG = "__ptm_widget_active";
     function addWidgets() {
-        // ahora usamos Shadow DOM por widget para encapsular estilo y marcado
         const names = [];
         document.querySelectorAll("#main > .its--container-fluid > .its--row").forEach((el, idx) => {
-            // evita insertar duplicados en el mismo elemento (host de shadow)
             if (el.querySelector(":scope > .ptm-widget-host")) return;
             const widgetName = el.classList[1] || "No se identifica el nombre";
 
-            // host para el shadow root
             const host = document.createElement("div");
             host.className = "ptm-widget-host";
 
-            // attach shadow root (modo open para debug/inspección)
             const sr = host.attachShadow({ mode: "open" });
 
-            // estilo encapsulado dentro del shadow root
             const style = document.createElement("style");
             style.textContent = `
                 .name {
@@ -57,29 +50,8 @@
     }
 
     function removeWidgets() {
-        // eliminar hosts con shadow
         document.querySelectorAll(".ptm-widget-host").forEach(el => el.remove());
     }
 
-    function toggleWidgets() {
-        if (window[FLAG]) {
-            removeWidgets();
-            window[FLAG] = false;
-            console.log("ptm: removed");
-        } else {
-            const names = addWidgets();
-            window[FLAG] = true;
-            console.log("ptm: injected", names);
-        }
-    }
-
-    function init() {
-        if (document.readyState === "loading") {
-            document.addEventListener("DOMContentLoaded", toggleWidgets, { once: true });
-        } else {
-            toggleWidgets();
-        }
-    }
-
-    init();
+    PTMWidgetManager.init("widget", addWidgets, removeWidgets);
 })();
