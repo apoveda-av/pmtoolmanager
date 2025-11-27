@@ -3,6 +3,7 @@ const availableTools = {
     "getNamesWidget": "Nombres Widget",
     "getInfoWeb": "Informacion Web",
     "getMetaSeo": "Meta Seo",
+    "getHeadersDom": "Headers",
     // Añade más herramientas aquí según las agregues a la carpeta tools/
 };
 
