@@ -4,6 +4,7 @@ const availableTools = {
     "getInfoWeb": "Informacion Web",
     "getMetaSeo": "Meta Seo",
     "getHeadersDom": "Headers",
+    "getDataCookies": "Data Cookies"
     // Añade más herramientas aquí según las agregues a la carpeta tools/
 };
 

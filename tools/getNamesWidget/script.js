@@ -1,7 +1,7 @@
 (function () {
     function addWidgets() {
         const names = [];
-        document.querySelectorAll("#main > .its--container-fluid > .its--row").forEach((el, idx) => {
+        document.querySelectorAll("#main > .its--container-fluid > .its--row").forEach((el) => {
             if (el.querySelector(":scope > .ptm-widget-host")) return;
             const widgetName = el.classList[1] || "No se identifica el nombre";
 
