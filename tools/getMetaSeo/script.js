@@ -1,23 +1,37 @@
 (function () {
-    function addWidgets() {
-        const body = document.body;
-        const data = [];
-        const seoTitleContent = document.querySelector('meta[property="og:title"]').content;
-        const seoDescriptionContent = document.querySelector('meta[property="og:description"]').content;
-        
-        if (body.querySelector(":scope > .ptm-metaseo-host")) return;
-        const titleDescription = seoTitleContent || "No tiene meta título";
-        const seoDescription = seoDescriptionContent || "No tiene meta descripción";
+  function addWidgets() {
+    const body = document.body;
+    const data = [];
+    data.push(
+      {
+        label: "Meta título",
+        content:
+          document.querySelector('meta[property="og:title"]')?.content ||
+          "No tiene meta título",
+      },
+      {
+        label: "Meta descripción",
+        content:
+          document.querySelector('meta[property="og:description"]')?.content ||
+          "No tiene meta descripción",
+      },
+      {
+        label: "GTM",
+        content:
+          document.querySelector('meta[name="gtm"]')?.content ||
+          "No tiene etiqueta GTM",
+      },
+    );
 
-        data.push(titleDescription, seoDescription);
-        
-        const host = document.createElement("div");
-        host.className = "ptm-metaseo-host";
+    if (body.querySelector(":scope > .ptm-metaseo-host")) return;
 
-        const sr = host.attachShadow({ mode: "open" });
+    const host = document.createElement("div");
+    host.className = "ptm-metaseo-host";
 
-        const style = document.createElement("style");
-        style.textContent = `
+    const sr = host.attachShadow({ mode: "open" });
+
+    const style = document.createElement("style");
+    style.textContent = `
             .name {
                 background: antiquewhite;
                 color: rgb(241,95,65);
@@ -38,34 +52,25 @@
                 color: #000000;
             }
         `;
-        const div = document.createElement("div");
-        div.className = "name";
-        data.forEach((item, index) => {
-            const p = document.createElement("div");
-            const span = document.createElement("span")
-            switch(index) {
-                case 0:
-                    p.innerText = "Meta título: ";
-                    break;
-                case 1:
-                    p.innerText = "Meta descripción: ";
-                    break;
-                default:
-                    p.innerText = "Info adicional: ";
-            }   
-            span.innerText = item;
-            p.appendChild(span);
-            div.appendChild(p);
-        });
-        sr.appendChild(style);
-        sr.appendChild(div);
-        body.insertBefore(host, body.firstChild);
-        return data;
-    }
+    const div = document.createElement("div");
+    div.className = "name";
+    data.forEach((item) => {
+      const p = document.createElement("div");
+      const span = document.createElement("span");
+      p.innerText = item.label + ": ";
+      span.innerText = item.content;
+      p.appendChild(span);
+      div.appendChild(p);
+    });
+    sr.appendChild(style);
+    sr.appendChild(div);
+    body.insertBefore(host, body.firstChild);
+    return data;
+  }
 
-    function removeWidgets() {
-        document.querySelectorAll(".ptm-metaseo-host").forEach(el => el.remove());
-    }
+  function removeWidgets() {
+    document.querySelectorAll(".ptm-metaseo-host").forEach((el) => el.remove());
+  }
 
-    PTMWidgetManager.init("metaseo", addWidgets, removeWidgets);
+  PTMWidgetManager.init("metaseo", addWidgets, removeWidgets);
 })();

@@ -7,10 +7,13 @@
         const allHeaders = document.querySelectorAll("h1, h2, h3, h4, h5, h6");
         const data = [];
         
-        allHeaders.forEach(header => {
+        allHeaders.forEach((header, index) => {
+            const id = `header-item-${index + 1}`;
+            header.id = id;
             data.push({
                 tag: header.tagName.toLowerCase(),
-                text: header.innerText || header.textContent
+                text: header.innerText || header.textContent,
+                id: id
             });
         });
         
@@ -46,6 +49,10 @@
                 background: white;
                 border-radius: 3px;
             }
+            .header-item:hover { 
+                background: #f0f0f0; 
+                cursor: pointer; 
+            }
             .header-item.h1 { padding-left: 5px; }
             .header-item.h2 { padding-left: 20px; }
             .header-item.h3 { padding-left: 35px; }
@@ -68,6 +75,7 @@
         data.forEach((item) => {
             const div = document.createElement("div");
             div.className = `header-item ${item.tag}`;
+            div.id = item.id;
             
             const tag = document.createElement("span");
             tag.className = "header-tag";
@@ -80,6 +88,22 @@
             div.appendChild(tag);
             div.appendChild(text);
             container.appendChild(div);
+            div.addEventListener("click", () => {
+                const target = document.getElementById(item.id);
+                const globalContainer = document.getElementById("its--global-container");
+                if (target) {
+                    globalContainer.style.overflow = "unset";
+                    const yOffset = -200; 
+                    const y = target.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                    window.scrollTo({ top: y, behavior: "smooth" });
+                    target.style.transition = "background-color 0.5s ease";
+                    const originalBg = target.style.backgroundColor;
+                    target.style.backgroundColor = "antiquewhite";
+                    setTimeout(() => {
+                        target.style.backgroundColor = originalBg;
+                    }, 3000);
+                }
+            });
         });
         
         sr.appendChild(style);

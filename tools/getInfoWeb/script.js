@@ -1,25 +1,38 @@
 (function () {
-    function addWidgets() {
-        const body = document.body;
-        const data = [];
-        const templateContent = document.querySelector('meta[name="template"]').content;
-        const versionContent = document.querySelector('meta[name="version"]').content;
-        const webnameContent = document.querySelector('meta[name="webname"]').content;
-        
-        if (body.querySelector(":scope > .ptm-infoweb-host")) return;
-        const template = templateContent || "Template desconocida";
-        const version = versionContent || "Version desconocida";
-        const webname = webnameContent || "Webname desconocido";
+  function addWidgets() {
+    const body = document.body;
+    const data = [];
+    if (body.querySelector(":scope > .ptm-infoweb-host")) return;
 
-        data.push(template, version, webname);
-        
-        const host = document.createElement("div");
-        host.className = "ptm-infoweb-host";
+    data.push(
+      {
+        label: "Plantilla",
+        content:
+          document.querySelector('meta[name="template"]')?.content ||
+          "Template desconocida",
+      },
+      {
+        label: "Versión",
+        content:
+          document.querySelector('meta[name="version"]')?.content ||
+          "Version desconocida",
+      },
+      {
+        label: "Nombre web",
+        content:
+          document.querySelector('meta[name="webname"]')?.content ||
+          document.querySelector('#all main input[name="bk-map"]')?.value ||
+          "Nombre web desconocida",
+      },
+    );
 
-        const sr = host.attachShadow({ mode: "open" });
+    const host = document.createElement("div");
+    host.className = "ptm-infoweb-host";
 
-        const style = document.createElement("style");
-        style.textContent = `
+    const sr = host.attachShadow({ mode: "open" });
+
+    const style = document.createElement("style");
+    style.textContent = `
             .name {
                 background: antiquewhite;
                 color: rgb(241,95,65);
@@ -40,37 +53,25 @@
                 color: #000000;
             }
         `;
-        const div = document.createElement("div");
-        div.className = "name";
-        data.forEach((item, index) => {
-            const p = document.createElement("div");
-            const span = document.createElement("span")
-            switch(index) {
-                case 0:
-                    p.innerText = "Plantilla: ";
-                    break;
-                case 1:
-                    p.innerText = "Versión: ";
-                    break;
-                case 2:
-                    p.innerText = "Nombre web: ";
-                    break;
-                default:
-                    p.innerText = "Info adicional: ";
-            }   
-            span.innerText = item;
-            p.appendChild(span);
-            div.appendChild(p);
-        });
-        sr.appendChild(style);
-        sr.appendChild(div);
-        body.insertBefore(host, body.firstChild);
-        return data;
-    }
+    const div = document.createElement("div");
+    div.className = "name";
+    data.forEach((item) => {
+      const p = document.createElement("div");
+      const span = document.createElement("span");
+      p.innerText = item.label + ": ";
+      span.innerText = item.content;
+      p.appendChild(span);
+      div.appendChild(p);
+    });
+    sr.appendChild(style);
+    sr.appendChild(div);
+    body.insertBefore(host, body.firstChild);
+    return data;
+  }
 
-    function removeWidgets() {
-        document.querySelectorAll(".ptm-infoweb-host").forEach(el => el.remove());
-    }
+  function removeWidgets() {
+    document.querySelectorAll(".ptm-infoweb-host").forEach((el) => el.remove());
+  }
 
-    PTMWidgetManager.init("infoweb", addWidgets, removeWidgets);
+  PTMWidgetManager.init("infoweb", addWidgets, removeWidgets);
 })();
