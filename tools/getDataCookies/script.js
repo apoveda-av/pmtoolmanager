@@ -1,19 +1,100 @@
 (function () {
+    function deleteCookie(name) {
+        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+    }
+
+    function createCookieItem(name, value, container, onDelete) {
+        const div = document.createElement("div");
+        div.className = "cookie-item";
+        Object.assign(div.style, {
+            marginBottom: "5px",
+            background: "white",
+            borderRadius: "3px",
+            display: "flex",
+            flexDirection: "column"
+        });
+
+        const nameSpan = document.createElement("span");
+        nameSpan.className = "cookie-name";
+        Object.assign(nameSpan.style, {
+            padding: "5px",
+            fontWeight: "bold",
+            cursor: "pointer",
+            display: "flex",
+            justifyContent: "space-between"
+        });
+        nameSpan.innerText = name;
+
+        const valueSpan = document.createElement("textarea");
+        valueSpan.className = "cookie-value";
+        Object.assign(valueSpan.style, {
+            color: "#000000",
+            fontSize: "12px",
+            wordBreak: "break-word",
+            display: "none"
+        });
+        valueSpan.innerText = value;
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.className = "delete-btn";
+        deleteBtn.innerText = "Eliminar";
+        deleteBtn.onclick = () => {
+            onDelete();
+            div.remove();
+            const remaining = container.querySelectorAll('.cookie-item').length;
+            
+            if (remaining === 0) {
+                container.innerHTML = "";
+                container.appendChild(createNoCookiesItem());
+            }
+        };
+
+        nameSpan.appendChild(deleteBtn);
+        div.appendChild(nameSpan);
+        div.appendChild(valueSpan);
+
+        nameSpan.addEventListener("click", (e) => {
+            if (e.target === deleteBtn) return;
+            valueSpan.style.display = valueSpan.style.display === "none" ? "inline" : "none";
+        });
+
+        return div;
+    }
+
+    function createNoCookiesItem() {
+        const div = document.createElement("div");
+        div.className = "cookie-item";
+        Object.assign(div.style, {
+            marginBottom: "5px",
+            background: "white",
+            borderRadius: "3px",
+            display: "flex",
+            flexDirection: "column"
+        });
+
+        const nameSpan = document.createElement("span");
+        nameSpan.className = "cookie-name";
+        Object.assign(nameSpan.style, {
+            padding: "5px",
+            fontWeight: "bold"
+        });
+        nameSpan.innerText = "No se encontraron cookies en esta página.";
+        div.appendChild(nameSpan);
+
+        return div;
+    }
+
     function addWidgets() {
         const body = document.body;
         if (body.querySelector(":scope > .ptm-datacookies-host")) return;
-        const data = [];
-        
-        const cookies = document.cookie.split("; ").map((cookie) => {
+
+        const cookies = document.cookie.split("; ").filter(Boolean).map(cookie => {
             const [name, value] = cookie.split("=");
             return { name, value };
         });
 
-        data.push(...cookies);
-        
         const host = document.createElement("div");
         host.className = "ptm-datacookies-host";
-
         const sr = host.attachShadow({ mode: "open" });
 
         const style = document.createElement("style");
@@ -38,53 +119,59 @@
                 max-height: 80vh;
                 overflow-y: auto;
             }
+            .delete-all-btn {
+                background: rgb(241,95,65);
+                color: white;
+                border: none;
+                border-radius: 3px;
+                padding: 5px 10px;
+                margin-bottom: 10px;
+                cursor: pointer;
+                font-size: 13px;
+                font-weight: bold;
+            }
+            .delete-btn {
+                background: #e74c3c;
+                color: white;
+                border: none;
+                border-radius: 3px;
+                padding: 2px 6px;
+                margin-left: 5px;
+                cursor: pointer;
+                font-size: 11px;
+            }
         `;
-        
+
         const container = document.createElement("div");
         container.className = "container";
-        data.forEach((item) => {
-            const div = document.createElement("div");
-            div.className = "cookie-item";
-            div.style.marginBottom = "5px";
-            div.style.padding = "5px";
-            div.style.background = "white";
-            div.style.borderRadius = "3px";
-            div.style.display = "flex";
-            div.style.flexDirection = "column";
 
-            const nameSpan = document.createElement("span");
-            nameSpan.className = "cookie-name";
-            nameSpan.style.fontWeight = "bold";
-            nameSpan.style.cursor = "pointer";
-            nameSpan.innerText = item.name;
+        if (cookies.length === 0) {
+            container.appendChild(createNoCookiesItem());
+        } else {
+            // Botón para eliminar todas las cookies
+            const deleteAllBtn = document.createElement("button");
+            deleteAllBtn.className = "delete-all-btn";
+            deleteAllBtn.innerText = "Eliminar todas las cookies";
+            deleteAllBtn.onclick = () => {
+                cookies.forEach(cookie => deleteCookie(cookie.name));
+                container.innerHTML = "";
+                container.appendChild(createNoCookiesItem());
+            };
+            container.appendChild(deleteAllBtn);
 
-            const valueSpan = document.createElement("span");
-            valueSpan.className = "cookie-value";
-            valueSpan.style.color = "#000000";
-            valueSpan.style.fontSize = "12px";
-            valueSpan.style.wordBreak = "break-word";
-            valueSpan.style.display = "none";
-            valueSpan.innerText = item.value;
-
-            div.appendChild(nameSpan);
-            div.appendChild(valueSpan);
-
-            div.addEventListener("click", () => {
-                if (valueSpan.style.display === "none") {
-                    valueSpan.style.display = "inline";
-                } else {
-                    valueSpan.style.display = "none";
-                }
+            cookies.forEach(({ name, value }) => {
+                container.appendChild(
+                    createCookieItem(name, value, container, () => deleteCookie(name))
+                );
             });
+        }
 
-            container.appendChild(div);
-        });
-        
         sr.appendChild(style);
         sr.appendChild(container);
         body.insertBefore(host, body.firstChild);
-        return data;
+        return cookies;
     }
+
     function removeWidgets() {
         document.querySelectorAll(".ptm-datacookies-host").forEach(el => el.remove());
     }
