@@ -8,6 +8,8 @@ const availableTools = {
     // Añade más herramientas aquí según las agregues a la carpeta tools/
 };
 
+const ext = typeof browser !== "undefined" ? browser : chrome;
+
 function loadToolButtons() {
     const toolList = document.getElementById("toolList");
     
@@ -16,10 +18,10 @@ function loadToolButtons() {
         btn.id = toolName;
         btn.textContent = availableTools[toolName];
         btn.addEventListener("click", () => {
-            chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-                chrome.scripting.executeScript({
+            ext.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
+                ext.scripting.executeScript({
                     target: { tabId: tabs[0].id },
-                    files: [`./tools/${toolName}/script.js`]
+                    files: [`/tools/${toolName}/script.js`]
                 });
             });
         });
