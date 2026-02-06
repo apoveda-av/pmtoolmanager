@@ -23,10 +23,10 @@
       },
     );
 
-    if (body.querySelector(":scope > .ptm-metaseo-host")) return;
+    if (body.querySelector(":scope > .pmt-metaseo-host")) return;
 
     const host = document.createElement("div");
-    host.className = "ptm-metaseo-host";
+    host.className = "pmt-metaseo-host";
 
     const sr = host.attachShadow({ mode: "open" });
 
@@ -69,8 +69,8 @@
   }
 
   function removeWidgets() {
-    document.querySelectorAll(".ptm-metaseo-host").forEach((el) => el.remove());
+    document.querySelectorAll(".pmt-metaseo-host").forEach((el) => el.remove());
   }
 
-  PTMWidgetManager.init("metaseo", addWidgets, removeWidgets);
+  PMTWidgetManager.init("metaseo", addWidgets, removeWidgets);
 })();
