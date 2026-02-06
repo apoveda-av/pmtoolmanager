@@ -1,7 +1,7 @@
 /**
  * Módulo compartido para gestionar widgets en todas las herramientas
  */
-const PTMWidgetManager = (function () {
+const PMTWidgetManager = (function () {
     // Registro de todas las herramientas activas
     const registry = new Map();
 
@@ -12,11 +12,11 @@ const PTMWidgetManager = (function () {
     function cleanupOthers(currentTool) {
         registry.forEach((removeFn, toolName) => {
             if (toolName !== currentTool) {
-                const FLAG = `__ptm_${toolName}_active`;
+                const FLAG = `__pmt_${toolName}_active`;
                 if (window[FLAG]) {
                     removeFn();
                     window[FLAG] = false;
-                    console.log(`ptm: ${toolName} removed (cleanup)`);
+                    console.log(`pmt: ${toolName} removed (cleanup)`);
                 }
             }
         });
@@ -30,7 +30,7 @@ const PTMWidgetManager = (function () {
      * @param {Function} removeFn - Función que elimina los widgets
      */
     function toggle(toolName, addFn, removeFn) {
-        const FLAG = `__ptm_${toolName}_active`;
+        const FLAG = `__pmt_${toolName}_active`;
         
         // Registrar la herramienta
         if (!registry.has(toolName)) {
@@ -43,11 +43,11 @@ const PTMWidgetManager = (function () {
         if (window[FLAG]) {
             removeFn();
             window[FLAG] = false;
-            console.log(`ptm: ${toolName} removed`);
+            console.log(`pmt: ${toolName} removed`);
         } else {
             const result = addFn();
             window[FLAG] = true;
-            console.log(`ptm: ${toolName} injected`, result);
+            console.log(`pmt: ${toolName} injected`, result);
         }
     }
 

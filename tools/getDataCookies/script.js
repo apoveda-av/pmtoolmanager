@@ -86,7 +86,7 @@
 
     function addWidgets() {
         const body = document.body;
-        if (body.querySelector(":scope > .ptm-datacookies-host")) return;
+        if (body.querySelector(":scope > .pmt-datacookies-host")) return;
 
         const cookies = document.cookie.split("; ").filter(Boolean).map(cookie => {
             const [name, value] = cookie.split("=");
@@ -94,7 +94,7 @@
         });
 
         const host = document.createElement("div");
-        host.className = "ptm-datacookies-host";
+        host.className = "pmt-datacookies-host";
         const sr = host.attachShadow({ mode: "open" });
 
         const style = document.createElement("style");
@@ -173,8 +173,8 @@
     }
 
     function removeWidgets() {
-        document.querySelectorAll(".ptm-datacookies-host").forEach(el => el.remove());
+        document.querySelectorAll(".pmt-datacookies-host").forEach(el => el.remove());
     }
 
-    PTMWidgetManager.init("datacookies", addWidgets, removeWidgets);
+    PMTWidgetManager.init("datacookies", addWidgets, removeWidgets);
 })();

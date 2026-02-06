@@ -2,7 +2,7 @@
   function addWidgets() {
     const body = document.body;
     const data = [];
-    if (body.querySelector(":scope > .ptm-infoweb-host")) return;
+    if (body.querySelector(":scope > .pmt-infoweb-host")) return;
 
     data.push(
       {
@@ -27,7 +27,7 @@
     );
 
     const host = document.createElement("div");
-    host.className = "ptm-infoweb-host";
+    host.className = "pmt-infoweb-host";
 
     const sr = host.attachShadow({ mode: "open" });
 
@@ -70,8 +70,8 @@
   }
 
   function removeWidgets() {
-    document.querySelectorAll(".ptm-infoweb-host").forEach((el) => el.remove());
+    document.querySelectorAll(".pmt-infoweb-host").forEach((el) => el.remove());
   }
 
-  PTMWidgetManager.init("infoweb", addWidgets, removeWidgets);
+  PMTWidgetManager.init("infoweb", addWidgets, removeWidgets);
 })();

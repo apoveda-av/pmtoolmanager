@@ -1,7 +1,7 @@
 (function () {
     function addWidgets() {
         const body = document.body;
-        if (body.querySelector(":scope > .ptm-headersdom-host")) return;
+        if (body.querySelector(":scope > .pmt-headersdom-host")) return;
         
         // Obtener todos los encabezados en orden del DOM
         const allHeaders = document.querySelectorAll("h1, h2, h3, h4, h5, h6");
@@ -18,7 +18,7 @@
         });
         
         const host = document.createElement("div");
-        host.className = "ptm-headersdom-host";
+        host.className = "pmt-headersdom-host";
 
         const sr = host.attachShadow({ mode: "open" });
 
@@ -113,8 +113,8 @@
     }
 
     function removeWidgets() {
-        document.querySelectorAll(".ptm-headersdom-host").forEach(el => el.remove());
+        document.querySelectorAll(".pmt-headersdom-host").forEach(el => el.remove());
     }
 
-    PTMWidgetManager.init("headersdom", addWidgets, removeWidgets);
+    PMTWidgetManager.init("headersdom", addWidgets, removeWidgets);
 })();

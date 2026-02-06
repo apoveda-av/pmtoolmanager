@@ -2,11 +2,11 @@
     function addWidgets() {
         const names = [];
         document.querySelectorAll("#main > .its--container-fluid > .its--row").forEach((el) => {
-            if (el.querySelector(":scope > .ptm-widget-host")) return;
+            if (el.querySelector(":scope > .pmt-widget-host")) return;
             const widgetName = el.classList[1] || "No se identifica el nombre";
 
             const host = document.createElement("div");
-            host.className = "ptm-widget-host";
+            host.className = "pmt-widget-host";
 
             const sr = host.attachShadow({ mode: "open" });
 
@@ -50,8 +50,8 @@
     }
 
     function removeWidgets() {
-        document.querySelectorAll(".ptm-widget-host").forEach(el => el.remove());
+        document.querySelectorAll(".pmt-widget-host").forEach(el => el.remove());
     }
 
-    PTMWidgetManager.init("widget", addWidgets, removeWidgets);
+    PMTWidgetManager.init("widget", addWidgets, removeWidgets);
 })();
