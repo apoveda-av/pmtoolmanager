@@ -2,9 +2,9 @@
   "manifest_version": 3,
   "name": "PM Tool Manager",
   "version": "1.0",
-  "description": "Extension para gestionar herramientas de Web Project Manager",
+  "description": "Estensión de herramientas de gestion para PMs",
   "icons": {
-    "48": "icons/avantio.png"
+    "64": "icons/avantio.png"
   },
   "permissions": [
     "activeTab",
@@ -22,5 +22,13 @@
       "js": ["./tools/shared.js"],
       "run_at": "document_start"
     }
-  ]
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "pmtoolmanager@avantio.com",
+      "data_collection_permissions": {
+        "required": ["websiteContent"]
+      }
+    }
+  }
 }
